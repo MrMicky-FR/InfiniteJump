@@ -1,0 +1,23 @@
+UpdateChecker: true
+
+#Cooldown between each jump
+Cooldown: 0
+
+Velocity: 2
+
+Sound:
+  Enable: true
+  Sound: ENTITY_BAT_TAKEOFF
+  Volume: 1.0
+  Pitch: 1.0
+
+Particles:
+  Enable: true
+  Particle: CRIT_MAGIC
+  Amount: 5
+
+Messages:
+  Activated: "&aMultipleJump activated"
+  Disabled: "&cMultiple jump disabled"
+
+RemoveFallDamages: true
