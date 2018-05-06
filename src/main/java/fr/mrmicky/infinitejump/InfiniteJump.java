@@ -27,14 +27,6 @@ public class InfiniteJump extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Verifiy that the plugin.yml is not modified
-        if (!getName().equals("InfiniteJump")
-                || !getDescription().getAuthors().equals(Collections.singletonList("MrMicky"))) {
-            getLogger().severe("The plugin.yml has been modified. Disabling plugin.");
-            getServer().getPluginManager().disablePlugin(this);
-            return;
-        }
-
         saveDefaultConfig();
 
         is18 = getServer().getVersion().contains("1.8");
