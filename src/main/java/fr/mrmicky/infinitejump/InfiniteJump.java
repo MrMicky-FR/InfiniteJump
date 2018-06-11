@@ -13,9 +13,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 /**
  * @author MrMicky
@@ -68,24 +68,37 @@ public class InfiniteJump extends JavaPlugin {
         jumps.forEach(uuid -> getServer().getPlayer(uuid).setAllowFlight(false));
     }
 
-    public void verifyConfig() {
+    @Override
+    public void reloadConfig() {
+        super.reloadConfig();
+        verifyConfig();
+    }
+
+    private void verifyConfig() {
+        String sound = getConfig().getString("Sound.Sound");
         try {
-            Sound.valueOf(getConfig().getString("Sound.Sound"));
+            Sound.valueOf(sound);
         } catch (IllegalArgumentException e) {
+            getLogger().warning("Wrong sound type in the config: " + sound);
             getConfig().set("Sound.Sound", is18 ? "BAT_TAKEOFF" : "ENTITY_BAT_TAKEOFF");
         }
 
+        String particle = getConfig().getString("Particles.Particle");
         if (is18) {
-            if (!Particle18.isValidParticle(getConfig().getString("Particles.Particle"))) {
-                getConfig().set("Particles.Particle", "CRIT_MAGIC");
+            if (Particle18.isValidParticle(particle)) {
+                return;
             }
         } else {
             try {
-                Particle.valueOf(getConfig().getString("Particles.Particle"));
+                Particle.valueOf(particle);
+                return;
             } catch (IllegalArgumentException e) {
-                getConfig().set("Particles.Particle", "CRIT_MAGIC");
+                // Wrong particle type
             }
         }
+
+        getLogger().warning("Wrong particle type in the config: " + particle);
+        getConfig().set("Particles.Particle", "CRIT_MAGIC");
     }
 
     private void checkUpdate() {
@@ -99,8 +112,7 @@ public class InfiniteJump extends JavaPlugin {
                 getLogger().info("You can download it on: " + getDescription().getWebsite());
             }
         } catch (Exception e) {
-            getLogger().warning("Failed to check for update on SpigotMC:");
-            e.printStackTrace();
+            getLogger().log(Level.WARNING, "Failed to check for update on SpigotMC", e);
         }
     }
 
@@ -115,11 +127,11 @@ public class InfiniteJump extends JavaPlugin {
     public int getMaxJump(Player p) {
         if (p.hasPermission("infinitejump.infinite")) {
             return 100;
-        } else {
-            for (int i = 10; i > 1; i--) {
-                if (p.hasPermission("infinitejump." + i)) {
-                    return i;
-                }
+        }
+
+        for (int i = 10; i > 1; i--) {
+            if (p.hasPermission("infinitejump." + i)) {
+                return i;
             }
         }
         return 2;

@@ -7,6 +7,6 @@ softdepend: [Spartan, AAC, NoCheatPlus]
 main: fr.mrmicky.infinitejump.InfiniteJump
 commands: 
   infinitejump:
-    description: Toggle infinite jump and reload the config
+    description: Toggle infinite jump or reload the config
     aliases: [ijump]
     usage: /<command> [toggle|reload]

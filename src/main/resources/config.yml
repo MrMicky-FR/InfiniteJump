@@ -17,7 +17,7 @@ Particles:
   Amount: 5
 
 Messages:
-  Activated: "&aMultipleJump activated"
+  Activated: "&aMultiple jump activated"
   Disabled: "&cMultiple jump disabled"
 
 RemoveFallDamages: true

@@ -91,11 +91,9 @@ public class JumpListener implements Listener {
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e) {
-        if (e.getEntityType() == EntityType.PLAYER && e.getCause() == DamageCause.FALL) {
-            Player p = (Player) e.getEntity();
-            if (m.getConfig().getBoolean("RemoveFallDamages") && m.getJumps().contains(p.getUniqueId())) {
+        if (e.getEntityType() == EntityType.PLAYER && e.getCause() == DamageCause.FALL &&
+                m.getConfig().getBoolean("RemoveFallDamages") && m.getJumps().contains(e.getEntity().getUniqueId())) {
                 e.setCancelled(true);
-            }
         }
     }
 }

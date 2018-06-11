@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  */
 public class Particle18 {
 
-    private static String packageName;
+    private static final String PACKAGE_NAME;
 
     private static final Constructor<?> PACKET_PARTICLE;
     private static final Class<?> ENUM_PARTICLE;
@@ -26,7 +26,7 @@ public class Particle18 {
         String name = Bukkit.getServer().getClass().getPackage().getName();
         String ver = name.substring(name.lastIndexOf('.') + 1);
 
-        packageName = "net.minecraft.server." + ver;
+        PACKAGE_NAME = "net.minecraft.server." + ver;
 
         Constructor<?> packetParticle = null;
         Class<?> enumParticle = null;
@@ -59,7 +59,7 @@ public class Particle18 {
     }
 
     private static Class<?> getClass(String name) throws ClassNotFoundException {
-        return Class.forName(packageName + "." + name);
+        return Class.forName(PACKAGE_NAME + "." + name);
     }
 
     public static void displayParticle(Location loc, String particle, int count) {
