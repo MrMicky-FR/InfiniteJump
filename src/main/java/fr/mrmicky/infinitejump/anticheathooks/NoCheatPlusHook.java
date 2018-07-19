@@ -22,7 +22,7 @@ public class NoCheatPlusHook implements NCPHook {
 
     @Override
     public String getHookName() {
-        return "InfiniteJump";
+        return m.getName();
     }
 
     @Override
@@ -32,6 +32,6 @@ public class NoCheatPlusHook implements NCPHook {
 
     @Override
     public boolean onCheckFailure(CheckType check, Player p, IViolationInfo vi) {
-        return m.getJumps().contains(p.getUniqueId());
+        return m.getJumpManager().isActive(p);
     }
 }

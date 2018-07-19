@@ -21,3 +21,10 @@ Messages:
   Disabled: "&cMultiple jump disabled"
 
 RemoveFallDamages: true
+
+EnableOnJoin: true
+
+WorldsWhitelist: false
+
+Worlds:
+- "world"

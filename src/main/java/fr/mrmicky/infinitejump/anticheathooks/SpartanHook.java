@@ -21,7 +21,7 @@ public class SpartanHook implements Listener {
 
     @EventHandler
     public void onViolation(PlayerViolationEvent e) {
-        if (e.getHackType() == HackType.IrregularMovements && m.getJumps().contains(e.getPlayer().getUniqueId())) {
+        if (e.getHackType() == HackType.IrregularMovements && m.getJumpManager().isActive(e.getPlayer())) {
             e.setCancelled(true);
         }
     }

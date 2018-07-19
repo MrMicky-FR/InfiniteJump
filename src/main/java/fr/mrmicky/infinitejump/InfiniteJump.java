@@ -3,18 +3,15 @@ package fr.mrmicky.infinitejump;
 import fr.mrmicky.infinitejump.anticheathooks.AACHook;
 import fr.mrmicky.infinitejump.anticheathooks.NoCheatPlusHook;
 import fr.mrmicky.infinitejump.anticheathooks.SpartanHook;
+import fr.mrmicky.infinitejump.utils.Particle18;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -22,19 +19,20 @@ import java.util.logging.Level;
  */
 public class InfiniteJump extends JavaPlugin {
 
+    private JumpManager jumpManager;
     private boolean is18 = false;
-    private List<UUID> jumps = new ArrayList<>();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        verifyConfig();
 
         is18 = getServer().getVersion().contains("1.8");
 
-        getServer().getPluginManager().registerEvents(new JumpListener(this), this);
-        getCommand("infinitejump").setExecutor(new CommandInfiniteJump(this));
+        jumpManager = new JumpManager(this);
 
-        verifyConfig();
+        getCommand("infinitejump").setExecutor(new CommandInfiniteJump(this));
+        getServer().getPluginManager().registerEvents(new JumpListener(this), this);
 
         // Anticheat hooks
         if (getServer().getPluginManager().isPluginEnabled("Spartan")) {
@@ -49,13 +47,6 @@ public class InfiniteJump extends JavaPlugin {
             new NoCheatPlusHook(this);
         }
 
-        // Support reloads
-        for (Player p : getServer().getOnlinePlayers()) {
-            if (p.hasPermission("infinitejump.use")) {
-                jumps.add(p.getUniqueId());
-            }
-        }
-
         if (getConfig().getBoolean("UpdateChecker")) {
             getServer().getScheduler().runTaskLaterAsynchronously(this, this::checkUpdate, 60);
         }
@@ -65,13 +56,17 @@ public class InfiniteJump extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        jumps.forEach(uuid -> getServer().getPlayer(uuid).setAllowFlight(false));
+        getServer().getOnlinePlayers().forEach(jumpManager::disable);
     }
 
     @Override
     public void reloadConfig() {
         super.reloadConfig();
         verifyConfig();
+    }
+
+    public JumpManager getJumpManager() {
+        return jumpManager;
     }
 
     private void verifyConfig() {
@@ -118,26 +113,9 @@ public class InfiniteJump extends JavaPlugin {
 
     public void spawnParticle(Location loc, String particle, int amount) {
         if (is18) {
-            Particle18.displayParticle(loc, particle, amount);
+            Particle18.spawnParticle(loc, particle, amount);
         } else {
             loc.getWorld().spawnParticle(Particle.valueOf(particle), loc, amount);
         }
-    }
-
-    public int getMaxJump(Player p) {
-        if (p.hasPermission("infinitejump.infinite")) {
-            return 100;
-        }
-
-        for (int i = 10; i > 1; i--) {
-            if (p.hasPermission("infinitejump." + i)) {
-                return i;
-            }
-        }
-        return 2;
-    }
-
-    public List<UUID> getJumps() {
-        return jumps;
     }
 }

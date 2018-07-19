@@ -36,11 +36,11 @@ public class CommandInfiniteJump implements CommandExecutor, TabCompleter {
         } else if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("infinitejump.use")) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                if (m.getJumps().remove(p.getUniqueId())) {
+                if (m.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
+                    m.getJumpManager().disable(p);
                     p.sendMessage(getConfigMessage("Disabled"));
-                    p.setAllowFlight(false);
                 } else {
-                    m.getJumps().add(p.getUniqueId());
+                    m.getJumpManager().enable(p);
                     p.sendMessage(getConfigMessage("Activated"));
                 }
             } else {
@@ -55,20 +55,18 @@ public class CommandInfiniteJump implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
         if (args.length == 1) {
-            List<String> futurCompletions = new ArrayList<>();
-            List<String> completion = new ArrayList<>();
+            List<String> completions = new ArrayList<>();
 
-            futurCompletions.add("about");
+            completions.add("about");
 
-            if (sender.hasPermission("infinitejump.use")) {
-                futurCompletions.add("toggle");
+            if (sender.hasPermission("infinitejump.use") && sender instanceof Player) {
+                completions.add("toggle");
             }
             if (sender.hasPermission("infinitejump.reload")) {
-                futurCompletions.add("reload");
+                completions.add("reload");
             }
 
-            StringUtil.copyPartialMatches(args[0], futurCompletions, completion);
-            return completion;
+            return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         }
         return Collections.emptyList();
     }
@@ -76,7 +74,7 @@ public class CommandInfiniteJump implements CommandExecutor, TabCompleter {
     private void sendUsage(CommandSender sender) {
         sender.sendMessage("§b-= §7Infinite Jump §b=-");
         sender.sendMessage("§7- §b/ijump about");
-        if (sender.hasPermission("infinitejump.use")) {
+        if (sender.hasPermission("infinitejump.use") && sender instanceof Player) {
             sender.sendMessage("§7- §b/ijump toggle");
         }
         if (sender.hasPermission("infinitejump.reload")) {

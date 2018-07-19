@@ -1,4 +1,4 @@
-package fr.mrmicky.infinitejump;
+package fr.mrmicky.infinitejump.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -62,11 +62,10 @@ public class Particle18 {
         return Class.forName(PACKAGE_NAME + "." + name);
     }
 
-    public static void displayParticle(Location loc, String particle, int count) {
+    public static void spawnParticle(Location loc, String particle, int count) {
         try {
             Object packet = PACKET_PARTICLE.newInstance(getEnum(ENUM_PARTICLE.getName() + "." + particle.toUpperCase()),
-                    true, (float) loc.getX(), (float) loc.getY(), (float) loc.getZ(), 0.0F, 0.0F, 0.0F, 1.0F, count,
-                    new int[]{});
+                    true, (float) loc.getX(), (float) loc.getY(), (float) loc.getZ(), 0.0F, 0.0F, 0.0F, 1.0F, count, new int[0]);
             sendPacket(packet, loc.getWorld());
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
