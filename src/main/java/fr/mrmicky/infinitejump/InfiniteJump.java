@@ -24,10 +24,10 @@ public class InfiniteJump extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        is18 = getServer().getVersion().contains("1.8");
+
         saveDefaultConfig();
         verifyConfig();
-
-        is18 = getServer().getVersion().contains("1.8");
 
         jumpManager = new JumpManager(this);
 
