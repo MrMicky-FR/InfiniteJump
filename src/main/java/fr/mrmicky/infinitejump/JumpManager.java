@@ -66,7 +66,9 @@ public class JumpManager extends BukkitRunnable {
 
         if (jumps.containsKey(p.getUniqueId())) {
             jumps.remove(p.getUniqueId());
-            p.setAllowFlight(false);
+            if (p.getGameMode() == GameMode.ADVENTURE || p.getGameMode() == GameMode.SURVIVAL) {
+                p.setAllowFlight(false);
+            }
         }
     }
 
