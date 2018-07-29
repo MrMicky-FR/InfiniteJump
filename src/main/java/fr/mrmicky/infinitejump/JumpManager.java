@@ -7,6 +7,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
+/**
+ * @author MrMicky
+ */
 public class JumpManager extends BukkitRunnable {
 
     private InfiniteJump m;
