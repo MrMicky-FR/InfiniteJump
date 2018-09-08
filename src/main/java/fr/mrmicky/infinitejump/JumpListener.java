@@ -64,7 +64,7 @@ public class JumpListener implements Listener {
 
             m.getJumpManager().getJumps().put(uuid, left);
 
-            p.setVelocity(p.getLocation().getDirection().multiply(m.getConfig().getDouble("Velocity")));
+            p.setVelocity(p.getLocation().getDirection().multiply(m.getConfig().getDouble("Velocity")).setY(m.getConfig().getDouble("VelcocityUp", 1.0)));
 
             if (m.getConfig().getBoolean("Sound.Enable")) {
                 p.getWorld().playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("Sound.Sound")),
@@ -73,7 +73,7 @@ public class JumpListener implements Listener {
             }
 
             if (m.getConfig().getBoolean("Particles.Enable")) {
-                m.spawnParticle(p.getLocation(), m.getConfig().getString("Particles.Particle"), m.getConfig().getInt("Particles.Amount"));
+                m.spawnParticles(p, p.getLocation(), m.getConfig().getString("Particles.Particle"), m.getConfig().getInt("Particles.Amount"));
             }
 
             int c = m.getConfig().getInt("Cooldown");

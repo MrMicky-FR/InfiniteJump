@@ -4,6 +4,7 @@ UpdateChecker: true
 Cooldown: 0
 
 Velocity: 2
+VelcocityUp: 1.5
 
 Sound:
   Enable: true

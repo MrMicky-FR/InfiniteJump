@@ -7,6 +7,7 @@ import fr.mrmicky.infinitejump.utils.Particle18;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -102,8 +103,7 @@ public class InfiniteJump extends JavaPlugin {
             String lastVersion = new BufferedReader(new InputStreamReader(url.openStream())).readLine();
 
             if (!getDescription().getVersion().equals(lastVersion)) {
-                getLogger().info("A new version is avaible ! Last version is " + lastVersion + " and you are on "
-                        + getDescription().getVersion());
+                getLogger().info("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
                 getLogger().info("You can download it on: " + getDescription().getWebsite());
             }
         } catch (Exception e) {
@@ -111,11 +111,17 @@ public class InfiniteJump extends JavaPlugin {
         }
     }
 
-    public void spawnParticle(Location loc, String particle, int amount) {
+    public void spawnParticles(Player sender, Location loc, String particleName, int amount) {
         if (is18) {
-            Particle18.spawnParticle(loc, particle, amount);
-        } else {
-            loc.getWorld().spawnParticle(Particle.valueOf(particle), loc, amount);
+            Particle18.spawnParticles(sender, loc, particleName, amount);
+            return;
+        }
+
+        Particle particle = Particle.valueOf(particleName);
+        for (Player p : getServer().getOnlinePlayers()) {
+            if (p.getWorld() == loc.getWorld() && loc.distanceSquared(p.getLocation()) <= 262144 && (sender == null || p.canSee(sender))) {
+                p.spawnParticle(particle, loc, amount);
+            }
         }
     }
 }
