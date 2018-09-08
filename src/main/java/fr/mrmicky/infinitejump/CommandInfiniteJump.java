@@ -2,9 +2,8 @@ package fr.mrmicky.infinitejump;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
@@ -15,7 +14,7 @@ import java.util.List;
 /**
  * @author MrMicky
  */
-public class CommandInfiniteJump implements CommandExecutor, TabCompleter {
+public class CommandInfiniteJump implements TabExecutor {
 
     private InfiniteJump m;
 
