@@ -14,9 +14,17 @@ public class JumpManager extends BukkitRunnable {
 
     private InfiniteJump m;
 
+    // players with ijump activated, event if they can't use it (non whitelist word or in creative)
     private List<UUID> enabledPlayers = new ArrayList<>();
+
+    // players that can use ijump, with the jump left
     private Map<UUID, Integer> jumps = new HashMap<>();
+
+    // players with a cooldown
     private List<UUID> cooldown = new ArrayList<>();
+
+    // players with the max amount of jumps in the jumps map, prevent lag with too many permissions check
+    private List<UUID> jumpsFull = new ArrayList<>();
 
     public JumpManager(InfiniteJump m) {
         this.m = m;
@@ -27,12 +35,13 @@ public class JumpManager extends BukkitRunnable {
     @Override
     public void run() {
         for (Map.Entry<UUID, Integer> entry : jumps.entrySet()) {
-            if (entry.getValue() > 0 && !cooldown.contains(entry.getKey())) {
+            if (!cooldown.contains(entry.getKey()) && !jumpsFull.contains(entry.getKey())) {
 
                 Player p = m.getServer().getPlayer(entry.getKey());
-                if (p != null && entry.getValue() > 0 && p.isOnGround()) {
+                if (p != null && p.isOnGround()) {
                     p.setAllowFlight(true);
                     jumps.put(entry.getKey(), getMaxJump(p));
+                    jumpsFull.add(p.getUniqueId());
                 }
             }
         }
@@ -43,7 +52,7 @@ public class JumpManager extends BukkitRunnable {
             return 100;
         }
 
-        for (int i = 10; i > 1; i--) {
+        for (int i = 10; i >= 3; i--) {
             if (p.hasPermission("infinitejump." + i)) {
                 return i;
             }
@@ -58,11 +67,13 @@ public class JumpManager extends BukkitRunnable {
             p.setAllowFlight(true);
             p.setFlying(false);
             jumps.put(p.getUniqueId(), getMaxJump(p));
+            jumpsFull.add(p.getUniqueId());
         }
     }
 
     public void disable(Player p) {
         enabledPlayers.remove(p.getUniqueId());
+        jumpsFull.remove(p.getUniqueId());
 
         if (jumps.containsKey(p.getUniqueId())) {
             jumps.remove(p.getUniqueId());
@@ -104,5 +115,9 @@ public class JumpManager extends BukkitRunnable {
 
     public List<UUID> getCooldown() {
         return cooldown;
+    }
+
+    public List<UUID> getJumpsFull() {
+        return jumpsFull;
     }
 }

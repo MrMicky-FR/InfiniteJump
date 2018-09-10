@@ -51,15 +51,27 @@ public class JumpListener implements Listener {
     public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
         Player p = e.getPlayer();
         UUID uuid = p.getUniqueId();
+
+        if (!m.getJumpManager().isActive(p)) {
+            return;
+        }
+
+        m.getJumpManager().getJumpsFull().remove(p.getUniqueId());
+
         int left = m.getJumpManager().getJumps().getOrDefault(uuid, 0);
 
-        if (left >= 2 && !m.getJumpManager().getCooldown().contains(uuid) && p.hasPermission("infinitejump.use")) {
+        if (left >= 2 && !m.getJumpManager().getCooldown().contains(uuid)) {
             e.setCancelled(true);
 
             if (--left <= 1) {
                 p.setAllowFlight(false);
                 p.setFlying(false);
-                left = 0;
+
+                int c = m.getConfig().getInt("Cooldown");
+                if (c > 0) {
+                    m.getJumpManager().getCooldown().add(uuid);
+                    m.getServer().getScheduler().runTaskLater(m, () -> m.getJumpManager().getCooldown().remove(uuid), c);
+                }
             }
 
             m.getJumpManager().getJumps().put(uuid, left);
@@ -74,12 +86,6 @@ public class JumpListener implements Listener {
 
             if (m.getConfig().getBoolean("Particles.Enable")) {
                 m.spawnParticles(p, p.getLocation(), m.getConfig().getString("Particles.Particle"), m.getConfig().getInt("Particles.Amount"));
-            }
-
-            int c = m.getConfig().getInt("Cooldown");
-            if (c > 0) {
-                m.getJumpManager().getCooldown().add(uuid);
-                m.getServer().getScheduler().runTaskLater(m, () -> m.getJumpManager().getCooldown().remove(uuid), c);
             }
         }
     }
