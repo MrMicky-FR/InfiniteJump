@@ -4,6 +4,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -26,11 +27,10 @@ public class JumpListener implements Listener {
         m.getServer().getOnlinePlayers().forEach(this::handleJoin);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        handleJoin(e.getPlayer());
+        m.getServer().getScheduler().runTask(m, () -> handleJoin(e.getPlayer()));
     }
-
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
