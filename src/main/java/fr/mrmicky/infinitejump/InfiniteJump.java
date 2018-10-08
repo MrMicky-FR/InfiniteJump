@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.logging.Level;
 
 /**
  * @author MrMicky
@@ -49,7 +49,7 @@ public class InfiniteJump extends JavaPlugin {
         }
 
         if (getConfig().getBoolean("UpdateChecker")) {
-            getServer().getScheduler().runTaskLaterAsynchronously(this, this::checkUpdate, 60);
+            getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
         }
 
         getLogger().info("The plugin has been successfully activated");
@@ -100,14 +100,15 @@ public class InfiniteJump extends JavaPlugin {
     private void checkUpdate() {
         try {
             URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=51522");
-            String lastVersion = new BufferedReader(new InputStreamReader(url.openStream())).readLine();
-
-            if (!getDescription().getVersion().equals(lastVersion)) {
-                getLogger().info("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
-                getLogger().info("You can download it on: " + getDescription().getWebsite());
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()))) {
+                String lastVersion = reader.readLine();
+                if (!getDescription().getVersion().equalsIgnoreCase(lastVersion)) {
+                    getLogger().warning("A new version is available ! Last version is " + lastVersion + " and you are on " + getDescription().getVersion());
+                    getLogger().warning("You can download it on: " + getDescription().getWebsite());
+                }
             }
-        } catch (Exception e) {
-            getLogger().log(Level.WARNING, "Failed to check for update on SpigotMC", e);
+        } catch (IOException e) {
+            // Don't display an error
         }
     }
 
