@@ -1,5 +1,6 @@
 package fr.mrmicky.infinitejump;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -24,7 +25,7 @@ public class JumpListener implements Listener {
         this.m = m;
 
         // for reloads
-        m.getServer().getOnlinePlayers().forEach(this::handleJoin);
+        Bukkit.getOnlinePlayers().forEach(this::handleJoin);
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -72,6 +73,8 @@ public class JumpListener implements Listener {
                     m.getJumpManager().getCooldown().add(uuid);
                     m.getServer().getScheduler().runTaskLater(m, () -> m.getJumpManager().getCooldown().remove(uuid), c);
                 }
+            } else if (p.isFlying()) {
+                p.setFlying(false);
             }
 
             m.getJumpManager().getJumps().put(uuid, left);

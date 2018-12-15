@@ -120,7 +120,7 @@ public class InfiniteJump extends JavaPlugin {
 
         Particle particle = Particle.valueOf(particleName);
         for (Player p : getServer().getOnlinePlayers()) {
-            if (p.getWorld() == loc.getWorld() && loc.distanceSquared(p.getLocation()) <= 262144 && (sender == null || p.canSee(sender))) {
+            if (p.getWorld() == loc.getWorld() && loc.distanceSquared(p.getLocation()) <= 65536 && (sender == null || p.canSee(sender))) {
                 p.spawnParticle(particle, loc, amount);
             }
         }
