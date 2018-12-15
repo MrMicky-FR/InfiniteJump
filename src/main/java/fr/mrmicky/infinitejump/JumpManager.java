@@ -34,13 +34,13 @@ public class JumpManager extends BukkitRunnable {
 
     @Override
     public void run() {
-        for (Map.Entry<UUID, Integer> entry : jumps.entrySet()) {
-            if (!cooldown.contains(entry.getKey()) && !jumpsFull.contains(entry.getKey())) {
+        for (UUID uuid : jumps.keySet()) {
+            if (!cooldown.contains(uuid) && !jumpsFull.contains(uuid)) {
 
-                Player p = m.getServer().getPlayer(entry.getKey());
+                Player p = m.getServer().getPlayer(uuid);
                 if (p != null && p.isOnGround()) {
                     p.setAllowFlight(true);
-                    jumps.put(entry.getKey(), getMaxJump(p));
+                    jumps.put(uuid, getMaxJump(p));
                     jumpsFull.add(p.getUniqueId());
                 }
             }
