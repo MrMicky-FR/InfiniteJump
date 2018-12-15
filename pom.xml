@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.mrmicky</groupId>
-    <artifactId>infinite-jump</artifactId>
+    <artifactId>infinitejump</artifactId>
     <version>1.2.6</version>
 
     <name>InfiniteJump</name>
@@ -84,7 +84,7 @@
             <artifactId>watchcat</artifactId>
             <version>2.1.6</version>
             <scope>system</scope>
-            <systemPath>${basedir}/libs/WatchCat.jar</systemPath>
+            <systemPath>${basedir}/libs/WatchCatAPI.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
