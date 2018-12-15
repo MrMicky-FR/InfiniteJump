@@ -75,9 +75,16 @@
         <dependency>
             <groupId>me.vagdedes</groupId>
             <artifactId>spartan.api</artifactId>
-            <version>Universal</version>
+            <version>universal</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/SpartanAPI.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>xyz.watchcat</groupId>
+            <artifactId>watchcat</artifactId>
+            <version>2.1.6</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/WatchCat.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
