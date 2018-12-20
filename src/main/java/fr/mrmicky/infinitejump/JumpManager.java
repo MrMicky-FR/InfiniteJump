@@ -15,16 +15,16 @@ public class JumpManager extends BukkitRunnable {
     private InfiniteJump m;
 
     // players with ijump activated, event if they can't use it (non whitelist word or in creative)
-    private List<UUID> enabledPlayers = new ArrayList<>();
+    private Set<UUID> enabledPlayers = new HashSet<>();
 
     // players that can use ijump, with the jump left
     private Map<UUID, Integer> jumps = new HashMap<>();
 
     // players with a cooldown
-    private List<UUID> cooldown = new ArrayList<>();
+    private Set<UUID> cooldown = new HashSet<>();
 
     // players with the max amount of jumps in the jumps map, prevent lag with too many permissions check
-    private List<UUID> jumpsFull = new ArrayList<>();
+    private Set<UUID> jumpsFull = new HashSet<>();
 
     public JumpManager(InfiniteJump m) {
         this.m = m;
@@ -105,7 +105,7 @@ public class JumpManager extends BukkitRunnable {
         return false;
     }
 
-    public List<UUID> getEnabledPlayers() {
+    public Set<UUID> getEnabledPlayers() {
         return enabledPlayers;
     }
 
@@ -113,11 +113,11 @@ public class JumpManager extends BukkitRunnable {
         return jumps;
     }
 
-    public List<UUID> getCooldown() {
+    public Set<UUID> getCooldown() {
         return cooldown;
     }
 
-    public List<UUID> getJumpsFull() {
+    public Set<UUID> getJumpsFull() {
         return jumpsFull;
     }
 }
