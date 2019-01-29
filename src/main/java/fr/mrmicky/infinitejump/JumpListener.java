@@ -1,5 +1,6 @@
 package fr.mrmicky.infinitejump;
 
+import fr.mrmicky.infinitejump.particle.ParticleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
@@ -18,13 +19,12 @@ import java.util.UUID;
  */
 public class JumpListener implements Listener {
 
-
     private InfiniteJump m;
 
     JumpListener(InfiniteJump m) {
         this.m = m;
 
-        // for reloads
+        // Support reloads
         Bukkit.getOnlinePlayers().forEach(this::handleJoin);
     }
 
@@ -79,7 +79,10 @@ public class JumpListener implements Listener {
 
             m.getJumpManager().getJumps().put(uuid, left);
 
-            p.setVelocity(p.getLocation().getDirection().multiply(m.getConfig().getDouble("Velocity")).setY(m.getConfig().getDouble("VelcocityUp", 1.0)));
+            double velocity = m.getConfig().getDouble("Velocity");
+            double velocityUp = m.getConfig().getDouble("VelcocityUp");
+
+            p.setVelocity(p.getLocation().getDirection().multiply(velocity).setY(velocityUp));
 
             if (m.getConfig().getBoolean("Sound.Enable")) {
                 p.getWorld().playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("Sound.Sound")),
@@ -88,15 +91,21 @@ public class JumpListener implements Listener {
             }
 
             if (m.getConfig().getBoolean("Particles.Enable")) {
-                m.spawnParticles(p, p.getLocation(), m.getConfig().getString("Particles.Particle"), m.getConfig().getInt("Particles.Amount"));
+                String particle = m.getConfig().getString("Particles.Particle");
+                int particleCount = m.getConfig().getInt("Particles.Amount");
+
+                ParticleUtils.spawnParticles(p, particle, p.getLocation(), particleCount);
             }
         }
     }
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent e) {
-        if (e.getEntityType() == EntityType.PLAYER && e.getCause() == DamageCause.FALL &&
-                m.getConfig().getBoolean("RemoveFallDamages") && m.getJumpManager().getJumps().containsKey(e.getEntity().getUniqueId())) {
+        if (e.getEntityType() != EntityType.PLAYER || e.getCause() != DamageCause.FALL) {
+            return;
+        }
+
+        if (m.getConfig().getBoolean("RemoveFallDamages") && m.getJumpManager().isActive((Player) e.getEntity())) {
             e.setCancelled(true);
         }
     }

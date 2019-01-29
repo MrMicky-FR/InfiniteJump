@@ -23,7 +23,7 @@ public class CommandInfiniteJump implements TabExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String s, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             sendUsage(sender);
         } else if (args[0].equalsIgnoreCase("about") || args[0].equalsIgnoreCase("info")) {
@@ -52,7 +52,7 @@ public class CommandInfiniteJump implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String s, String[] args) {
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
 

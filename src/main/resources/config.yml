@@ -1,6 +1,6 @@
 UpdateChecker: true
 
-#Cooldown between each jump
+#Cooldown between each jump in ticks
 Cooldown: 0
 
 Velocity: 2

@@ -4,11 +4,8 @@ import fr.mrmicky.infinitejump.anticheathooks.AACHook;
 import fr.mrmicky.infinitejump.anticheathooks.NoCheatPlusHook;
 import fr.mrmicky.infinitejump.anticheathooks.SpartanHook;
 import fr.mrmicky.infinitejump.anticheathooks.WatchCatHook;
-import fr.mrmicky.infinitejump.utils.Particle18;
-import org.bukkit.Location;
-import org.bukkit.Particle;
+import fr.mrmicky.infinitejump.particle.ParticleUtils;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.BufferedReader;
@@ -22,12 +19,9 @@ import java.net.URL;
 public class InfiniteJump extends JavaPlugin {
 
     private JumpManager jumpManager;
-    private boolean is18 = false;
 
     @Override
     public void onEnable() {
-        is18 = getServer().getVersion().contains("1.8");
-
         saveDefaultConfig();
         verifyConfig();
 
@@ -81,25 +75,15 @@ public class InfiniteJump extends JavaPlugin {
             Sound.valueOf(sound);
         } catch (IllegalArgumentException e) {
             getLogger().warning("Wrong sound type in the config: " + sound);
-            getConfig().set("Sound.Sound", is18 ? "BAT_TAKEOFF" : "ENTITY_BAT_TAKEOFF");
+            getConfig().set("Sound.Sound", getServer().getVersion().contains("1.8") ? "BAT_TAKEOFF" : "ENTITY_BAT_TAKEOFF");
         }
 
         String particle = getConfig().getString("Particles.Particle");
-        if (is18) {
-            if (Particle18.isValidParticle(particle)) {
-                return;
-            }
-        } else {
-            try {
-                Particle.valueOf(particle);
-                return;
-            } catch (IllegalArgumentException e) {
-                // Wrong particle type
-            }
-        }
 
-        getLogger().warning("Wrong particle type in the config: " + particle);
-        getConfig().set("Particles.Particle", "CRIT_MAGIC");
+        if (!ParticleUtils.isValidParticle(particle)) {
+            getLogger().warning("Wrong particle type in the config: " + particle);
+            getConfig().set("Particles.Particle", "CRIT_MAGIC");
+        }
     }
 
     private void checkUpdate() {
@@ -114,20 +98,6 @@ public class InfiniteJump extends JavaPlugin {
             }
         } catch (IOException e) {
             // Don't display an error
-        }
-    }
-
-    public void spawnParticles(Player sender, Location loc, String particleName, int amount) {
-        if (is18) {
-            Particle18.spawnParticles(sender, loc, particleName, amount);
-            return;
-        }
-
-        Particle particle = Particle.valueOf(particleName);
-        for (Player p : getServer().getOnlinePlayers()) {
-            if (p.getWorld() == loc.getWorld() && loc.distanceSquared(p.getLocation()) <= 65536 && (sender == null || p.canSee(sender))) {
-                p.spawnParticle(particle, loc, amount);
-            }
         }
     }
 }
