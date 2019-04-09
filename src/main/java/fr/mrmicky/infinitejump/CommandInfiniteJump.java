@@ -26,28 +26,37 @@ public class CommandInfiniteJump implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
             sendUsage(sender);
-        } else if (args[0].equalsIgnoreCase("about") || args[0].equalsIgnoreCase("info")) {
-            sender.sendMessage("§b" + plugin.getName() + "§7 by §bMrMicky §7version §b" + plugin.getDescription().getVersion());
-            sender.sendMessage("§7Download: §b" + plugin.getDescription().getWebsite());
-        } else if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("infinitejump.reload")) {
-            plugin.reloadConfig();
-            sender.sendMessage("§aConfig reloaded");
-        } else if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("infinitejump.use")) {
-            if (sender instanceof Player) {
-                Player p = (Player) sender;
-                if (plugin.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
-                    plugin.getJumpManager().disable(p);
-                    p.sendMessage(getConfigMessage("Disabled"));
-                } else {
-                    plugin.getJumpManager().enable(p);
-                    p.sendMessage(getConfigMessage("Activated"));
-                }
-            } else {
-                sender.sendMessage("§cThis command need to be use by a player");
-            }
-        } else {
-            sendUsage(sender);
+            return true;
         }
+
+        if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("infinitejump.reload")) {
+            plugin.reloadConfig();
+            sender.sendMessage(ChatColor.YELLOW + "Config reloaded");
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("infinitejump.use")) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "Only players can use this command");
+                return true;
+            }
+
+            Player p = (Player) sender;
+
+            if (plugin.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
+                plugin.getJumpManager().disable(p);
+                p.sendMessage(getConfigMessage("Disabled"));
+
+            } else {
+                plugin.getJumpManager().enable(p);
+                p.sendMessage(getConfigMessage("Activated"));
+            }
+
+            return true;
+        }
+
+        sendUsage(sender);
+
         return true;
     }
 
@@ -56,11 +65,10 @@ public class CommandInfiniteJump implements TabExecutor {
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
 
-            completions.add("about");
-
             if (sender.hasPermission("infinitejump.use") && sender instanceof Player) {
                 completions.add("toggle");
             }
+
             if (sender.hasPermission("infinitejump.reload")) {
                 completions.add("reload");
             }
@@ -72,17 +80,22 @@ public class CommandInfiniteJump implements TabExecutor {
     }
 
     private void sendUsage(CommandSender sender) {
-        sender.sendMessage("§b-= §7Infinite Jump §b=-");
-        sender.sendMessage("§7- §b/ijump about");
+        sender.sendMessage(color("&bInfiniteJump v" + plugin.getDescription().getVersion() + " &7by &bMrMicky&7."));
+
         if (sender.hasPermission("infinitejump.use") && sender instanceof Player) {
-            sender.sendMessage("§7- §b/ijump toggle");
+            sender.sendMessage(color("&7- &b/infinitejump toggle"));
         }
+
         if (sender.hasPermission("infinitejump.reload")) {
-            sender.sendMessage("§7- §b/ijump reload");
+            sender.sendMessage(color("&7- &b/infinitejump reload"));
         }
     }
 
+    private String color(String s) {
+        return ChatColor.translateAlternateColorCodes('&', s);
+    }
+
     private String getConfigMessage(String key) {
-        return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Messages." + key));
+        return color(plugin.getConfig().getString("Messages." + key));
     }
 }
