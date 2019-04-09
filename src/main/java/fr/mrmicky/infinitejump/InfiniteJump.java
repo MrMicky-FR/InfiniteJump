@@ -16,7 +16,7 @@ import java.net.URL;
 /**
  * @author MrMicky
  */
-public class InfiniteJump extends JavaPlugin {
+public final class InfiniteJump extends JavaPlugin {
 
     private JumpManager jumpManager;
 
@@ -50,8 +50,6 @@ public class InfiniteJump extends JavaPlugin {
         if (getConfig().getBoolean("UpdateChecker")) {
             getServer().getScheduler().runTaskAsynchronously(this, this::checkUpdate);
         }
-
-        getLogger().info("The plugin has been successfully activated");
     }
 
     @Override
@@ -62,6 +60,7 @@ public class InfiniteJump extends JavaPlugin {
     @Override
     public void reloadConfig() {
         super.reloadConfig();
+
         verifyConfig();
     }
 
@@ -97,7 +96,7 @@ public class InfiniteJump extends JavaPlugin {
                 }
             }
         } catch (IOException e) {
-            // Don't display an error
+            // ignore
         }
     }
 }

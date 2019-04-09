@@ -5,31 +5,35 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * @author MrMicky
  */
 public class JumpManager extends BukkitRunnable {
 
-    private InfiniteJump m;
-
     // players with ijump activated, event if they can't use it (non whitelist word or in creative)
-    private Set<UUID> enabledPlayers = new HashSet<>();
+    private final Set<UUID> enabledPlayers = new HashSet<>();
 
     // players that can use ijump, with the jump left
-    private Map<UUID, Integer> jumps = new HashMap<>();
+    private final Map<UUID, Integer> jumps = new HashMap<>();
 
     // players with a cooldown
-    private Set<UUID> cooldown = new HashSet<>();
+    private final Set<UUID> cooldown = new HashSet<>();
 
     // players with the max amount of jumps in the jumps map, prevent lag with too many permissions check
-    private Set<UUID> jumpsFull = new HashSet<>();
+    private final Set<UUID> jumpsFull = new HashSet<>();
 
-    public JumpManager(InfiniteJump m) {
-        this.m = m;
+    private final InfiniteJump plugin;
 
-        runTaskTimer(m, 10, 10);
+    public JumpManager(InfiniteJump plugin) {
+        this.plugin = plugin;
+
+        runTaskTimer(plugin, 10, 10);
     }
 
     @Override
@@ -37,7 +41,7 @@ public class JumpManager extends BukkitRunnable {
         for (UUID uuid : jumps.keySet()) {
             if (!cooldown.contains(uuid) && !jumpsFull.contains(uuid)) {
 
-                Player p = m.getServer().getPlayer(uuid);
+                Player p = plugin.getServer().getPlayer(uuid);
                 if (p != null && p.isOnGround()) {
                     p.setAllowFlight(true);
                     jumps.put(uuid, getMaxJump(p));
@@ -92,11 +96,11 @@ public class JumpManager extends BukkitRunnable {
     }
 
     public boolean isWhitelistWorld(World w) {
-        if (!m.getConfig().getBoolean("WorldsWhitelist")) {
+        if (!plugin.getConfig().getBoolean("WorldsWhitelist")) {
             return true;
         }
 
-        for (String s : m.getConfig().getStringList("Worlds")) {
+        for (String s : plugin.getConfig().getStringList("Worlds")) {
             if (s.equalsIgnoreCase(w.getName())) {
                 return true;
             }

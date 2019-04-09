@@ -9,7 +9,11 @@ import org.bukkit.entity.Player;
 /**
  * @author MrMicky
  */
-public class ParticleUtils {
+public final class ParticleUtils {
+
+    private ParticleUtils() {
+        throw new UnsupportedOperationException();
+    }
 
     private static final boolean LEGACY = !FastReflection.optionalClass("org.bukkit.Particle").isPresent();
 

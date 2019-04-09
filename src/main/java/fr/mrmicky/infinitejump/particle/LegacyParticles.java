@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 /**
  * @author MrMicky
  */
-class LegacyParticles {
+final class LegacyParticles {
 
     private static final Class<?> ENUM_PARTICLE;
     private static final Method PLAYER_GET_HANDLE;
@@ -33,6 +33,10 @@ class LegacyParticles {
         } catch (ReflectiveOperationException e) {
             throw new ExceptionInInitializerError(e);
         }
+    }
+
+    private LegacyParticles() {
+        throw new UnsupportedOperationException();
     }
 
     static void spawnParticles(Player p, String particle, Location loc, int count) {

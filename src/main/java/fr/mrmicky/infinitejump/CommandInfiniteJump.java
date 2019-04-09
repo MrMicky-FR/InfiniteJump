@@ -16,10 +16,10 @@ import java.util.List;
  */
 public class CommandInfiniteJump implements TabExecutor {
 
-    private InfiniteJump m;
+    private final InfiniteJump plugin;
 
-    CommandInfiniteJump(InfiniteJump m) {
-        this.m = m;
+    public CommandInfiniteJump(InfiniteJump plugin) {
+        this.plugin = plugin;
     }
 
     @Override
@@ -27,19 +27,19 @@ public class CommandInfiniteJump implements TabExecutor {
         if (args.length == 0) {
             sendUsage(sender);
         } else if (args[0].equalsIgnoreCase("about") || args[0].equalsIgnoreCase("info")) {
-            sender.sendMessage("§b" + m.getName() + "§7 by §bMrMicky §7version §b" + m.getDescription().getVersion());
-            sender.sendMessage("§7Download: §b" + m.getDescription().getWebsite());
+            sender.sendMessage("§b" + plugin.getName() + "§7 by §bMrMicky §7version §b" + plugin.getDescription().getVersion());
+            sender.sendMessage("§7Download: §b" + plugin.getDescription().getWebsite());
         } else if (args[0].equalsIgnoreCase("reload") && sender.hasPermission("infinitejump.reload")) {
-            m.reloadConfig();
+            plugin.reloadConfig();
             sender.sendMessage("§aConfig reloaded");
         } else if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("infinitejump.use")) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                if (m.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
-                    m.getJumpManager().disable(p);
+                if (plugin.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
+                    plugin.getJumpManager().disable(p);
                     p.sendMessage(getConfigMessage("Disabled"));
                 } else {
-                    m.getJumpManager().enable(p);
+                    plugin.getJumpManager().enable(p);
                     p.sendMessage(getConfigMessage("Activated"));
                 }
             } else {
@@ -67,6 +67,7 @@ public class CommandInfiniteJump implements TabExecutor {
 
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         }
+
         return Collections.emptyList();
     }
 
@@ -82,6 +83,6 @@ public class CommandInfiniteJump implements TabExecutor {
     }
 
     private String getConfigMessage(String key) {
-        return ChatColor.translateAlternateColorCodes('&', m.getConfig().getString("Messages." + key));
+        return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("Messages." + key));
     }
 }

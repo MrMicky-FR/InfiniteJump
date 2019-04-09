@@ -10,7 +10,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import java.util.UUID;
 
@@ -19,10 +23,10 @@ import java.util.UUID;
  */
 public class JumpListener implements Listener {
 
-    private InfiniteJump m;
+    private final InfiniteJump plugin;
 
-    JumpListener(InfiniteJump m) {
-        this.m = m;
+    public JumpListener(InfiniteJump plugin) {
+        this.plugin = plugin;
 
         // Support reloads
         Bukkit.getOnlinePlayers().forEach(this::handleJoin);
@@ -30,12 +34,12 @@ public class JumpListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerJoin(PlayerJoinEvent e) {
-        m.getServer().getScheduler().runTask(m, () -> handleJoin(e.getPlayer()));
+        plugin.getServer().getScheduler().runTask(plugin, () -> handleJoin(e.getPlayer()));
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        m.getJumpManager().disable(e.getPlayer());
+        plugin.getJumpManager().disable(e.getPlayer());
     }
 
     @EventHandler
@@ -45,7 +49,7 @@ public class JumpListener implements Listener {
 
     @EventHandler
     public void onPlayerGamemodeChange(PlayerGameModeChangeEvent e) {
-        m.getServer().getScheduler().runTask(m, () -> reloadPlayer(e.getPlayer()));
+        plugin.getServer().getScheduler().runTask(plugin, () -> reloadPlayer(e.getPlayer()));
     }
 
     @EventHandler
@@ -53,46 +57,46 @@ public class JumpListener implements Listener {
         Player p = e.getPlayer();
         UUID uuid = p.getUniqueId();
 
-        if (!m.getJumpManager().isActive(p)) {
+        if (!plugin.getJumpManager().isActive(p)) {
             return;
         }
 
-        m.getJumpManager().getJumpsFull().remove(p.getUniqueId());
+        plugin.getJumpManager().getJumpsFull().remove(p.getUniqueId());
 
-        int left = m.getJumpManager().getJumps().getOrDefault(uuid, 0);
+        int left = plugin.getJumpManager().getJumps().getOrDefault(uuid, 0);
 
-        if (left >= 2 && !m.getJumpManager().getCooldown().contains(uuid)) {
+        if (left >= 2 && !plugin.getJumpManager().getCooldown().contains(uuid)) {
             e.setCancelled(true);
 
             if (--left <= 1) {
                 p.setAllowFlight(false);
                 p.setFlying(false);
 
-                int c = m.getConfig().getInt("Cooldown");
+                int c = plugin.getConfig().getInt("Cooldown");
                 if (c > 0) {
-                    m.getJumpManager().getCooldown().add(uuid);
-                    m.getServer().getScheduler().runTaskLater(m, () -> m.getJumpManager().getCooldown().remove(uuid), c);
+                    plugin.getJumpManager().getCooldown().add(uuid);
+                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> plugin.getJumpManager().getCooldown().remove(uuid), c);
                 }
             } else if (p.isFlying()) {
                 p.setFlying(false);
             }
 
-            m.getJumpManager().getJumps().put(uuid, left);
+            plugin.getJumpManager().getJumps().put(uuid, left);
 
-            double velocity = m.getConfig().getDouble("Velocity");
-            double velocityUp = m.getConfig().getDouble("VelcocityUp");
+            double velocity = plugin.getConfig().getDouble("Velocity");
+            double velocityUp = plugin.getConfig().getDouble("VelcocityUp");
 
             p.setVelocity(p.getLocation().getDirection().multiply(velocity).setY(velocityUp));
 
-            if (m.getConfig().getBoolean("Sound.Enable")) {
-                p.getWorld().playSound(p.getLocation(), Sound.valueOf(m.getConfig().getString("Sound.Sound")),
-                        (float) m.getConfig().getDouble("Sound.Volume"),
-                        (float) m.getConfig().getDouble("Sound.Pitch"));
+            if (plugin.getConfig().getBoolean("Sound.Enable")) {
+                p.getWorld().playSound(p.getLocation(), Sound.valueOf(plugin.getConfig().getString("Sound.Sound")),
+                        (float) plugin.getConfig().getDouble("Sound.Volume"),
+                        (float) plugin.getConfig().getDouble("Sound.Pitch"));
             }
 
-            if (m.getConfig().getBoolean("Particles.Enable")) {
-                String particle = m.getConfig().getString("Particles.Particle");
-                int particleCount = m.getConfig().getInt("Particles.Amount");
+            if (plugin.getConfig().getBoolean("Particles.Enable")) {
+                String particle = plugin.getConfig().getString("Particles.Particle");
+                int particleCount = plugin.getConfig().getInt("Particles.Amount");
 
                 ParticleUtils.spawnParticles(p, particle, p.getLocation(), particleCount);
             }
@@ -105,26 +109,26 @@ public class JumpListener implements Listener {
             return;
         }
 
-        if (m.getConfig().getBoolean("RemoveFallDamages") && m.getJumpManager().isActive((Player) e.getEntity())) {
+        if (plugin.getConfig().getBoolean("RemoveFallDamages") && plugin.getJumpManager().isActive((Player) e.getEntity())) {
             e.setCancelled(true);
         }
     }
 
     private void handleJoin(Player p) {
-        if (m.getConfig().getBoolean("EnableOnJoin")) {
+        if (plugin.getConfig().getBoolean("EnableOnJoin")) {
             verifyEnable(p);
         }
     }
 
     private void verifyEnable(Player p) {
         if (p.hasPermission("infinitejump.use")) {
-            m.getJumpManager().enable(p);
+            plugin.getJumpManager().enable(p);
         }
     }
 
     private void reloadPlayer(Player p) {
-        if (m.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
-            m.getJumpManager().disable(p);
+        if (plugin.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
+            plugin.getJumpManager().disable(p);
             verifyEnable(p);
         }
     }

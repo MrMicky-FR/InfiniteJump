@@ -12,26 +12,27 @@ import org.bukkit.entity.Player;
  */
 public class NoCheatPlusHook implements NCPHook {
 
-    private InfiniteJump m;
+    private final InfiniteJump plugin;
 
-    public NoCheatPlusHook(InfiniteJump m) {
-        this.m = m;
+    public NoCheatPlusHook(InfiniteJump plugin) {
+        this.plugin = plugin;
+
         NCPHookManager.addHook(CheckType.MOVING_SURVIVALFLY, this);
-        m.getLogger().info("NoCheatPlus hook enabled");
+        plugin.getLogger().info("NoCheatPlus hook enabled");
     }
 
     @Override
     public String getHookName() {
-        return m.getName();
+        return plugin.getName();
     }
 
     @Override
     public String getHookVersion() {
-        return m.getDescription().getVersion();
+        return plugin.getDescription().getVersion();
     }
 
     @Override
     public boolean onCheckFailure(CheckType check, Player p, IViolationInfo vi) {
-        return m.getJumpManager().isActive(p);
+        return plugin.getJumpManager().isActive(p);
     }
 }
