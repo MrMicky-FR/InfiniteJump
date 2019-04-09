@@ -5,6 +5,7 @@ description: The ultimate double jump / infinite jump plugin !
 website: https://www.spigotmc.org/resources/inifinitejump.51522/
 softdepend: [Spartan, AAC, NoCheatPlus, WatchCat]
 main: fr.mrmicky.infinitejump.InfiniteJump
+api-version: 1.13
 commands: 
   infinitejump:
     description: Toggle infinite jump or reload the config

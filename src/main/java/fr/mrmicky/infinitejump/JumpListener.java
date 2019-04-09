@@ -29,7 +29,7 @@ public class JumpListener implements Listener {
         this.plugin = plugin;
 
         // Support reloads
-        Bukkit.getOnlinePlayers().forEach(this::handleJoin);
+        Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getOnlinePlayers().forEach(this::handleJoin));
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -42,7 +42,7 @@ public class JumpListener implements Listener {
         plugin.getJumpManager().disable(e.getPlayer());
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerWorldChanged(PlayerChangedWorldEvent e) {
         reloadPlayer(e.getPlayer());
     }
@@ -128,7 +128,7 @@ public class JumpListener implements Listener {
 
     private void reloadPlayer(Player p) {
         if (plugin.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
-            plugin.getJumpManager().disable(p);
+            plugin.getJumpManager().disableAuto(p);
             verifyEnable(p);
         }
     }

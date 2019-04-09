@@ -77,6 +77,9 @@ public class JumpManager extends BukkitRunnable {
 
     public void disable(Player p) {
         enabledPlayers.remove(p.getUniqueId());
+    }
+
+    public void disableAuto(Player p) {
         jumpsFull.remove(p.getUniqueId());
 
         if (jumps.containsKey(p.getUniqueId())) {
