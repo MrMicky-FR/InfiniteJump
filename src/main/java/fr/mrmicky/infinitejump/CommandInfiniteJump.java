@@ -41,15 +41,15 @@ public class CommandInfiniteJump implements TabExecutor {
                 return true;
             }
 
-            Player p = (Player) sender;
+            Player player = (Player) sender;
 
-            if (plugin.getJumpManager().getEnabledPlayers().contains(p.getUniqueId())) {
-                plugin.getJumpManager().disable(p);
-                p.sendMessage(getConfigMessage("Disabled"));
+            if (plugin.getJumpManager().getEnabledPlayers().contains(player.getUniqueId())) {
+                plugin.getJumpManager().disable(player);
+                player.sendMessage(getConfigMessage("Disabled"));
 
             } else {
-                plugin.getJumpManager().enable(p);
-                p.sendMessage(getConfigMessage("Activated"));
+                plugin.getJumpManager().enable(player);
+                player.sendMessage(getConfigMessage("Activated"));
             }
 
             return true;

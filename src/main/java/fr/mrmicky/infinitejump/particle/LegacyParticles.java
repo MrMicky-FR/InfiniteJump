@@ -1,6 +1,6 @@
 package fr.mrmicky.infinitejump.particle;
 
-import fr.mrmicky.infinitejump.FastReflection;
+import fr.mrmicky.infinitejump.utils.FastReflection;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -39,9 +39,9 @@ final class LegacyParticles {
         throw new UnsupportedOperationException();
     }
 
-    static void spawnParticles(Player p, String particle, Location loc, int count) {
+    static void spawnParticles(Player player, String particle, Location loc, int count) {
         try {
-            Object entityPlayer = p == null ? null : PLAYER_GET_HANDLE.invoke(p);
+            Object entityPlayer = player == null ? null : PLAYER_GET_HANDLE.invoke(player);
             Object worldServer = WORLD_GET_HANDLE.invoke(loc.getWorld());
             SEND_PARTICLES.invoke(worldServer, entityPlayer, getParticle(particle), true, loc.getX(), loc.getY(), loc.getZ(), count, 0.0, 0.0, 0.0, 1.0, new int[0]);
         } catch (ReflectiveOperationException e) {

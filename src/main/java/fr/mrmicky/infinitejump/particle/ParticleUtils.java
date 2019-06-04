@@ -1,6 +1,6 @@
 package fr.mrmicky.infinitejump.particle;
 
-import fr.mrmicky.infinitejump.FastReflection;
+import fr.mrmicky.infinitejump.utils.FastReflection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;

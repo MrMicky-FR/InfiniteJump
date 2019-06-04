@@ -51,60 +51,60 @@ public class JumpManager extends BukkitRunnable {
         }
     }
 
-    public int getMaxJump(Player p) {
-        if (p.hasPermission("infinitejump.infinite")) {
+    public int getMaxJump(Player player) {
+        if (player.hasPermission("infinitejump.infinite")) {
             return 100;
         }
 
         for (int i = 10; i >= 3; i--) {
-            if (p.hasPermission("infinitejump." + i)) {
+            if (player.hasPermission("infinitejump." + i)) {
                 return i;
             }
         }
         return 2;
     }
 
-    public void enable(Player p) {
-        enabledPlayers.add(p.getUniqueId());
+    public void enable(Player player) {
+        enabledPlayers.add(player.getUniqueId());
 
-        if (shouldActive(p)) {
-            p.setAllowFlight(true);
-            p.setFlying(false);
-            jumps.put(p.getUniqueId(), getMaxJump(p));
-            jumpsFull.add(p.getUniqueId());
+        if (shouldActive(player)) {
+            player.setAllowFlight(true);
+            player.setFlying(false);
+            jumps.put(player.getUniqueId(), getMaxJump(player));
+            jumpsFull.add(player.getUniqueId());
         }
     }
 
-    public void disable(Player p) {
-        enabledPlayers.remove(p.getUniqueId());
+    public void disable(Player player) {
+        enabledPlayers.remove(player.getUniqueId());
     }
 
-    public void disableAuto(Player p) {
-        jumpsFull.remove(p.getUniqueId());
+    public void disableAuto(Player player) {
+        jumpsFull.remove(player.getUniqueId());
 
-        if (jumps.containsKey(p.getUniqueId())) {
-            jumps.remove(p.getUniqueId());
-            if (p.getGameMode() == GameMode.ADVENTURE || p.getGameMode() == GameMode.SURVIVAL) {
-                p.setAllowFlight(false);
+        if (jumps.containsKey(player.getUniqueId())) {
+            jumps.remove(player.getUniqueId());
+            if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SURVIVAL) {
+                player.setAllowFlight(false);
             }
         }
     }
 
-    public boolean isActive(Player p) {
-        return jumps.containsKey(p.getUniqueId());
+    public boolean isActive(Player player) {
+        return jumps.containsKey(player.getUniqueId());
     }
 
-    public boolean shouldActive(Player p) {
-        return (p.getGameMode() == GameMode.ADVENTURE || p.getGameMode() == GameMode.SURVIVAL) && isWhitelistWorld(p.getWorld());
+    public boolean shouldActive(Player player) {
+        return (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SURVIVAL) && isWhitelistWorld(player.getWorld());
     }
 
-    public boolean isWhitelistWorld(World w) {
+    public boolean isWhitelistWorld(World world) {
         if (!plugin.getConfig().getBoolean("WorldsWhitelist")) {
             return true;
         }
 
         for (String s : plugin.getConfig().getStringList("Worlds")) {
-            if (s.equalsIgnoreCase(w.getName())) {
+            if (s.equalsIgnoreCase(world.getName())) {
                 return true;
             }
         }

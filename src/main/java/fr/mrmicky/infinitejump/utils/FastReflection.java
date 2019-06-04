@@ -1,4 +1,4 @@
-package fr.mrmicky.infinitejump;
+package fr.mrmicky.infinitejump.utils;
 
 import org.bukkit.Bukkit;
 
