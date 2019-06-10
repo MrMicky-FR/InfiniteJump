@@ -3,7 +3,6 @@ package fr.mrmicky.infinitejump;
 import fr.mrmicky.infinitejump.anticheathooks.AACHook;
 import fr.mrmicky.infinitejump.anticheathooks.NoCheatPlusHook;
 import fr.mrmicky.infinitejump.anticheathooks.SpartanHook;
-import fr.mrmicky.infinitejump.anticheathooks.WatchCatHook;
 import fr.mrmicky.infinitejump.particle.ParticleUtils;
 import org.bukkit.Sound;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -41,10 +40,6 @@ public final class InfiniteJump extends JavaPlugin {
 
         if (getServer().getPluginManager().getPlugin("NoCheatPlus") != null) {
             new NoCheatPlusHook(this);
-        }
-
-        if (getServer().getPluginManager().getPlugin("WatchCat") != null) {
-            new WatchCatHook(this);
         }
 
         if (getConfig().getBoolean("UpdateChecker")) {
