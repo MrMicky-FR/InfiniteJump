@@ -29,7 +29,7 @@ public final class InfiniteJump extends JavaPlugin {
         getCommand("infinitejump").setExecutor(new CommandInfiniteJump(this));
         getServer().getPluginManager().registerEvents(new JumpListener(this), this);
 
-        // Anticheat hooks
+        // AntiCheat hooks
         if (getServer().getPluginManager().getPlugin("Spartan") != null) {
             new SpartanHook(this);
         }

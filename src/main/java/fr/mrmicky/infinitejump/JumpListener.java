@@ -43,12 +43,12 @@ public class JumpListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerWorldChanged(PlayerChangedWorldEvent e) {
+    public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
         reloadPlayer(e.getPlayer());
     }
 
     @EventHandler
-    public void onPlayerGamemodeChange(PlayerGameModeChangeEvent e) {
+    public void onPlayerGameModeChange(PlayerGameModeChangeEvent e) {
         plugin.getServer().getScheduler().runTask(plugin, () -> reloadPlayer(e.getPlayer()));
     }
 
