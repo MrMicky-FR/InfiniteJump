@@ -72,7 +72,7 @@
         </dependency>
         <dependency>
             <groupId>me.vagdedes</groupId>
-            <artifactId>spartan.api</artifactId>
+            <artifactId>spartan-api</artifactId>
             <version>universal</version>
             <scope>system</scope>
             <systemPath>${basedir}/libs/SpartanAPI.jar</systemPath>

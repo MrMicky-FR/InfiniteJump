@@ -15,6 +15,7 @@ final class LegacyParticles {
     private static final Method PLAYER_GET_HANDLE;
     private static final Method WORLD_GET_HANDLE;
     private static final Method SEND_PARTICLES;
+    private static final int[] EMPTY = new int[0];
 
     static {
         try {
@@ -43,7 +44,7 @@ final class LegacyParticles {
         try {
             Object entityPlayer = player == null ? null : PLAYER_GET_HANDLE.invoke(player);
             Object worldServer = WORLD_GET_HANDLE.invoke(loc.getWorld());
-            SEND_PARTICLES.invoke(worldServer, entityPlayer, getParticle(particle), true, loc.getX(), loc.getY(), loc.getZ(), count, 0.0, 0.0, 0.0, 1.0, new int[0]);
+            SEND_PARTICLES.invoke(worldServer, entityPlayer, getParticle(particle), true, loc.getX(), loc.getY(), loc.getZ(), count, 0.0, 0.0, 0.0, 1.0, EMPTY);
         } catch (ReflectiveOperationException e) {
             e.printStackTrace();
         }

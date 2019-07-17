@@ -77,13 +77,14 @@ public class JumpManager extends BukkitRunnable {
 
     public void disable(Player player) {
         enabledPlayers.remove(player.getUniqueId());
+
+        disableAuto(player);
     }
 
     public void disableAuto(Player player) {
         jumpsFull.remove(player.getUniqueId());
 
-        if (jumps.containsKey(player.getUniqueId())) {
-            jumps.remove(player.getUniqueId());
+        if (jumps.remove(player.getUniqueId()) != null) {
             if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SURVIVAL) {
                 player.setAllowFlight(false);
             }
