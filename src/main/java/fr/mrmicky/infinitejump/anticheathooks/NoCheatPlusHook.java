@@ -7,9 +7,6 @@ import fr.neatmonster.nocheatplus.hooks.NCPHook;
 import fr.neatmonster.nocheatplus.hooks.NCPHookManager;
 import org.bukkit.entity.Player;
 
-/**
- * @author MrMicky
- */
 public class NoCheatPlusHook implements NCPHook {
 
     private final InfiniteJump plugin;

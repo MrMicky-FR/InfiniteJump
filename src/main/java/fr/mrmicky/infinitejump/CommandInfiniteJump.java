@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @author MrMicky
- */
 public class CommandInfiniteJump implements TabExecutor {
 
     private final InfiniteJump plugin;

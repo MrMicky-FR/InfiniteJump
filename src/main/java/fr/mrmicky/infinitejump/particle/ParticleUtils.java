@@ -6,9 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-/**
- * @author MrMicky
- */
 public final class ParticleUtils {
 
     private ParticleUtils() {

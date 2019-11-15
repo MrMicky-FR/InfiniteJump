@@ -7,9 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-/**
- * @author MrMicky
- */
 public class AACHook implements Listener {
 
     private final InfiniteJump plugin;

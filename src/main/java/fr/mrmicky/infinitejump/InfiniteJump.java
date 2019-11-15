@@ -12,9 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-/**
- * @author MrMicky
- */
 public final class InfiniteJump extends JavaPlugin {
 
     private JumpManager jumpManager;

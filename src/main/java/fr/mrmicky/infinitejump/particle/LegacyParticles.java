@@ -6,9 +6,6 @@ import org.bukkit.entity.Player;
 
 import java.lang.reflect.Method;
 
-/**
- * @author MrMicky
- */
 final class LegacyParticles {
 
     private static final Class<?> ENUM_PARTICLE;

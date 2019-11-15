@@ -11,9 +11,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * @author MrMicky
- */
 public class JumpManager extends BukkitRunnable {
 
     // players with ijump activated, event if they can't use it (non whitelist word or in creative)

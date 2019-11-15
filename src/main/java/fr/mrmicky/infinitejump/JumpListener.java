@@ -18,9 +18,6 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import java.util.UUID;
 
-/**
- * @author MrMicky
- */
 public class JumpListener implements Listener {
 
     private final InfiniteJump plugin;
@@ -44,12 +41,12 @@ public class JumpListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerChangedWorld(PlayerChangedWorldEvent e) {
-        reloadPlayer(e.getPlayer());
+        Bukkit.getScheduler().runTask(plugin, () -> reloadPlayer(e.getPlayer()));
     }
 
     @EventHandler
     public void onPlayerGameModeChange(PlayerGameModeChangeEvent e) {
-        plugin.getServer().getScheduler().runTask(plugin, () -> reloadPlayer(e.getPlayer()));
+        Bukkit.getScheduler().runTask(plugin, () -> reloadPlayer(e.getPlayer()));
     }
 
     @EventHandler
