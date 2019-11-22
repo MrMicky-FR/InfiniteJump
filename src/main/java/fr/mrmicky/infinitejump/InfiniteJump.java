@@ -46,7 +46,9 @@ public final class InfiniteJump extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getOnlinePlayers().forEach(jumpManager::disable);
+        if (jumpManager != null) {
+            getServer().getOnlinePlayers().forEach(jumpManager::disable);
+        }
     }
 
     @Override
