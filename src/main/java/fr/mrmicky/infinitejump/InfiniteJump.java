@@ -1,6 +1,7 @@
 package fr.mrmicky.infinitejump;
 
 import fr.mrmicky.infinitejump.anticheathooks.AACHook;
+import fr.mrmicky.infinitejump.anticheathooks.MatrixHook;
 import fr.mrmicky.infinitejump.anticheathooks.NoCheatPlusHook;
 import fr.mrmicky.infinitejump.anticheathooks.SpartanHook;
 import fr.mrmicky.infinitejump.particle.ParticleUtils;
@@ -37,6 +38,10 @@ public final class InfiniteJump extends JavaPlugin {
 
         if (getServer().getPluginManager().getPlugin("NoCheatPlus") != null) {
             new NoCheatPlusHook(this);
+        }
+
+        if (getServer().getPluginManager().getPlugin("Matrix") != null){
+            new MatrixHook(this);
         }
 
         if (getConfig().getBoolean("UpdateChecker")) {
