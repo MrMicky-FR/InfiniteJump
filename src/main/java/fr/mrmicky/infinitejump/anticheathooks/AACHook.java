@@ -20,7 +20,9 @@ public class AACHook implements Listener {
 
     @EventHandler
     public void onViolation(PlayerViolationEvent e) {
-        if (e.getHackType() == HackType.FLY && plugin.getJumpManager().isActive(e.getPlayer())) {
+        HackType hackType = e.getHackType();
+
+        if ((hackType == HackType.MOVE || hackType == HackType.NOFALL) && plugin.getJumpManager().isActive(e.getPlayer())) {
             e.setCancelled(true);
         }
     }

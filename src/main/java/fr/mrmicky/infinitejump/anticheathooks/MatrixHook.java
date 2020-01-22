@@ -16,12 +16,13 @@ public class MatrixHook implements Listener {
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
         plugin.getLogger().info("Matrix hook enabled");
-
     }
 
     @EventHandler
     public void onViolation(PlayerViolationEvent e) {
-        if (e.getHackType() == HackType.SPEED || e.getHackType() == HackType.VELOCITY || e.getHackType() == HackType.PHASE && plugin.getJumpManager().isActive(e.getPlayer())) {
+        HackType hackType = e.getHackType();
+
+        if ((hackType == HackType.SPEED || hackType == HackType.VELOCITY || hackType == HackType.PHASE) && plugin.getJumpManager().isActive(e.getPlayer())) {
             e.setCancelled(true);
         }
     }
