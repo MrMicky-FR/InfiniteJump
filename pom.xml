@@ -87,6 +87,13 @@
             <version>67d2563374</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>rip.reflex</groupId>
+            <artifactId>api</artifactId>
+            <version>7</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/ReflexAPI-v7.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
