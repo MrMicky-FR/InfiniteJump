@@ -11,7 +11,7 @@ import rip.reflex.api.event.ReflexCheckEvent;
 
 public class ReflexHook implements Listener {
 
-    private InfiniteJump plugin;
+    private final InfiniteJump plugin;
 
     public ReflexHook(InfiniteJump plugin) {
         this.plugin = plugin;
@@ -22,7 +22,6 @@ public class ReflexHook implements Listener {
 
     @EventHandler
     public void onViolation(ReflexCheckEvent e) {
-
         Cheat cheat = e.getCheat();
 
         if (cheat == Cheat.Speed && plugin.getJumpManager().isActive(e.getPlayer())) {
