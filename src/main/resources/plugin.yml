@@ -3,7 +3,7 @@ version: ${project.version}
 author: MrMicky
 description: The ultimate double jump / infinite jump plugin !
 website: https://www.spigotmc.org/resources/inifinitejump.51522/
-softdepend: [Spartan, AAC, NoCheatPlus, Matrix]
+softdepend: [Spartan, AAC, NoCheatPlus, Matrix, Reflex]
 main: fr.mrmicky.infinitejump.InfiniteJump
 api-version: 1.13
 commands: 
