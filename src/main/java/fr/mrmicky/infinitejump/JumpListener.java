@@ -62,41 +62,43 @@ public class JumpListener implements Listener {
 
         int jumpsLeft = plugin.getJumpManager().getJumps().getOrDefault(uuid, 0);
 
-        if (jumpsLeft >= 2 && !plugin.getJumpManager().getCooldown().contains(uuid)) {
-            e.setCancelled(true);
+        if (jumpsLeft < 2 || plugin.getJumpManager().getCooldown().contains(uuid)) {
+            return;
+        }
 
-            if (--jumpsLeft <= 1) {
-                player.setAllowFlight(false);
-                player.setFlying(false);
+        e.setCancelled(true);
 
-                int c = plugin.getConfig().getInt("Cooldown");
-                if (c > 0) {
-                    plugin.getJumpManager().getCooldown().add(uuid);
-                    plugin.getServer().getScheduler().runTaskLater(plugin, () -> plugin.getJumpManager().getCooldown().remove(uuid), c);
-                }
-            } else if (player.isFlying()) {
-                player.setFlying(false);
+        if (--jumpsLeft <= 1) {
+            player.setAllowFlight(false);
+            player.setFlying(false);
+
+            int c = plugin.getConfig().getInt("Cooldown");
+            if (c > 0) {
+                plugin.getJumpManager().getCooldown().add(uuid);
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> plugin.getJumpManager().getCooldown().remove(uuid), c);
             }
+        } else if (player.isFlying()) {
+            player.setFlying(false);
+        }
 
-            plugin.getJumpManager().getJumps().put(uuid, jumpsLeft);
+        plugin.getJumpManager().getJumps().put(uuid, jumpsLeft);
 
-            double velocity = plugin.getConfig().getDouble("Velocity");
-            double velocityUp = plugin.getConfig().getDouble("VelcocityUp");
+        double velocity = plugin.getConfig().getDouble("Velocity");
+        double velocityUp = plugin.getConfig().getDouble("VelcocityUp");
 
-            player.setVelocity(player.getLocation().getDirection().multiply(velocity).setY(velocityUp));
+        player.setVelocity(player.getLocation().getDirection().multiply(velocity).setY(velocityUp));
 
-            if (plugin.getConfig().getBoolean("Sound.Enable")) {
-                player.getWorld().playSound(player.getLocation(), Sound.valueOf(plugin.getConfig().getString("Sound.Sound")),
-                        (float) plugin.getConfig().getDouble("Sound.Volume"),
-                        (float) plugin.getConfig().getDouble("Sound.Pitch"));
-            }
+        if (plugin.getConfig().getBoolean("Sound.Enable")) {
+            player.getWorld().playSound(player.getLocation(), Sound.valueOf(plugin.getConfig().getString("Sound.Sound")),
+                    (float) plugin.getConfig().getDouble("Sound.Volume"),
+                    (float) plugin.getConfig().getDouble("Sound.Pitch"));
+        }
 
-            if (plugin.getConfig().getBoolean("Particles.Enable")) {
-                String particle = plugin.getConfig().getString("Particles.Particle");
-                int particleCount = plugin.getConfig().getInt("Particles.Amount");
+        if (plugin.getConfig().getBoolean("Particles.Enable")) {
+            String particle = plugin.getConfig().getString("Particles.Particle");
+            int particleCount = plugin.getConfig().getInt("Particles.Amount");
 
-                ParticleUtils.spawnParticles(player, particle, player.getLocation(), particleCount);
-            }
+            ParticleUtils.spawnParticles(player, particle, player.getLocation(), particleCount);
         }
     }
 

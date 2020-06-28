@@ -17,12 +17,13 @@ public final class ParticleUtils {
     public static void spawnParticles(Player sender, String particleName, Location loc, int count) {
         if (LEGACY) {
             LegacyParticles.spawnParticles(sender, particleName, loc, count);
-        } else {
-            Particle particle = Particle.valueOf(particleName);
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.getWorld() == loc.getWorld() && loc.distanceSquared(p.getLocation()) <= 65536 && (sender == null || p.canSee(sender))) {
-                    p.spawnParticle(particle, loc, count);
-                }
+            return;
+        }
+
+        Particle particle = Particle.valueOf(particleName);
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getWorld() == loc.getWorld() && loc.distanceSquared(p.getLocation()) <= 65536 && (sender == null || p.canSee(sender))) {
+                p.spawnParticle(particle, loc, count);
             }
         }
     }
