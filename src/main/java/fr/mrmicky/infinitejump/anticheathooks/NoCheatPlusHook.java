@@ -14,7 +14,10 @@ public class NoCheatPlusHook implements NCPHook {
     public NoCheatPlusHook(InfiniteJump plugin) {
         this.plugin = plugin;
 
-        NCPHookManager.addHook(CheckType.MOVING_SURVIVALFLY, this);
+        CheckType[] types = {CheckType.MOVING_SURVIVALFLY, CheckType.MOVING_CREATIVEFLY};
+
+        NCPHookManager.addHook(types, this);
+
         plugin.getLogger().info("NoCheatPlus hook enabled");
     }
 
