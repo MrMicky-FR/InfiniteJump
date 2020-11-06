@@ -33,6 +33,6 @@ public class NoCheatPlusHook implements NCPHook {
 
     @Override
     public boolean onCheckFailure(CheckType check, Player p, IViolationInfo vi) {
-        return plugin.getJumpManager().isActive(p);
+        return plugin.getJumpManager().hasRecentJump(p);
     }
 }

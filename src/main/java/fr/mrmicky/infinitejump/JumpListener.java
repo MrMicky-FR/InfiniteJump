@@ -86,6 +86,8 @@ public class JumpListener implements Listener {
         double velocity = plugin.getConfig().getDouble("Velocity");
         double velocityUp = plugin.getConfig().getDouble("VelcocityUp");
 
+        plugin.getJumpManager().updateLastJump(player);
+
         player.setVelocity(player.getLocation().getDirection().multiply(velocity).setY(velocityUp));
 
         if (plugin.getConfig().getBoolean("Sound.Enable")) {

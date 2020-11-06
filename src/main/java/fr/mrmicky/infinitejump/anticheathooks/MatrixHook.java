@@ -22,7 +22,11 @@ public class MatrixHook implements Listener {
     public void onViolation(PlayerViolationEvent e) {
         HackType hackType = e.getHackType();
 
-        if ((hackType == HackType.SPEED || hackType == HackType.VELOCITY || hackType == HackType.PHASE) && plugin.getJumpManager().isActive(e.getPlayer())) {
+        if (hackType != HackType.SPEED && hackType != HackType.VELOCITY && hackType != HackType.PHASE) {
+            return;
+        }
+
+        if (plugin.getJumpManager().hasRecentJump(e.getPlayer())) {
             e.setCancelled(true);
         }
     }

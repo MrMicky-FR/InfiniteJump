@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -24,6 +25,9 @@ public class JumpManager extends BukkitRunnable {
 
     // players with the max amount of jumps in the jumps map, prevent lag with too many permissions check
     private final Set<UUID> jumpsFull = new HashSet<>();
+
+    // last time this player used double jump - for anti-cheats
+    private final Map<UUID, Instant> lastJumpTime = new HashMap<>();
 
     private final InfiniteJump plugin;
 
@@ -80,12 +84,31 @@ public class JumpManager extends BukkitRunnable {
 
     public void disableAuto(Player player) {
         jumpsFull.remove(player.getUniqueId());
+        lastJumpTime.remove(player.getUniqueId());
 
         if (jumps.remove(player.getUniqueId()) != null) {
             if (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SURVIVAL) {
                 player.setAllowFlight(false);
             }
         }
+    }
+
+    public boolean hasRecentJump(Player player) {
+        if (!isActive(player)) {
+            return false;
+        }
+
+        Instant lastJump = lastJumpTime.get(player.getUniqueId());
+
+        if (lastJump == null) {
+            return false;
+        }
+
+        return lastJump.plusSeconds(5).isAfter(Instant.now());
+    }
+
+    public void updateLastJump(Player player) {
+        lastJumpTime.put(player.getUniqueId(), Instant.now());
     }
 
     public boolean isActive(Player player) {
