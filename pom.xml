@@ -6,7 +6,7 @@
 
     <groupId>fr.mrmicky</groupId>
     <artifactId>infinitejump</artifactId>
-    <version>1.2.11</version>
+    <version>1.2.12</version>
 
     <name>InfiniteJump</name>
 
@@ -50,10 +50,6 @@
             <url>https://repo.md-5.net/content/repositories/releases/</url>
         </repository>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-        <repository>
             <id>reflex-repo</id>
             <url>https://archiva.reflex.rip/repository/public/</url>
         </repository>
@@ -79,16 +75,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.github.jiangdashao</groupId>
-            <artifactId>matrix-api-repo</artifactId>
-            <version>67d2563374</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>rip.reflex</groupId>
             <artifactId>ReflexAPI</artifactId>
             <version>7</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>me.rerere</groupId>
+            <artifactId>matrix-api</artifactId>
+            <version>6.0.3</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/libs/MatrixAPI-6.0.3.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>me.vagdedes</groupId>

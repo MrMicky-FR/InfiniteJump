@@ -22,7 +22,7 @@ public class MatrixHook implements Listener {
     public void onViolation(PlayerViolationEvent e) {
         HackType hackType = e.getHackType();
 
-        if (hackType != HackType.SPEED && hackType != HackType.VELOCITY && hackType != HackType.PHASE) {
+        if (hackType != HackType.MOVE && hackType != HackType.VELOCITY && hackType != HackType.PHASE) {
             return;
         }
 
