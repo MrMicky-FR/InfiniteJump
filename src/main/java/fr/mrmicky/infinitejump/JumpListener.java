@@ -1,5 +1,6 @@
 package fr.mrmicky.infinitejump;
 
+import fr.mrmicky.infinitejump.events.InfiniteJumpToggleEvent;
 import fr.mrmicky.infinitejump.particle.ParticleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -63,6 +64,12 @@ public class JumpListener implements Listener {
         int jumpsLeft = plugin.getJumpManager().getJumps().getOrDefault(uuid, 0);
 
         if (jumpsLeft < 2 || plugin.getJumpManager().getCooldown().contains(uuid)) {
+            return;
+        }
+
+        InfiniteJumpToggleEvent infiniteJumpToggleEvent = new InfiniteJumpToggleEvent(e.getPlayer());
+        Bukkit.getPluginManager().callEvent(infiniteJumpToggleEvent);
+        if (infiniteJumpToggleEvent.isCancelled()){
             return;
         }
 
