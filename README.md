@@ -1,5 +1,5 @@
 # InfiniteJump
-[![Build Status](https://travis-ci.org/MrMicky-FR/InfiniteJump.svg?branch=master)](https://travis-ci.org/MrMicky-FR/InfiniteJump)
+[![Java CI](https://github.com/MrMicky-FR/InfiniteJump/actions/workflows/build.yml/badge.svg)](https://github.com/MrMicky-FR/InfiniteJump/actions/workflows/build.yml)
 
 The ultimate Bukkit double jump plugin: double jump, triple jump, infinite jump and more !
 
