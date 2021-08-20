@@ -52,8 +52,7 @@ public final class FastReflection {
         }
     }
 
-    public static <T extends Enum<T>> T enumValueOf(Class<?> enumClass, String enumName) {
-        //noinspection unchecked
-        return Enum.valueOf((Class<T>) enumClass, enumName.toUpperCase());
+    public static Object enumValueOf(Class<?> enumClass, String enumName) {
+        return Enum.valueOf(enumClass.asSubclass(Enum.class), enumName);
     }
 }
