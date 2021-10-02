@@ -1,5 +1,6 @@
 package fr.mrmicky.infinitejump;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -33,21 +35,7 @@ public class CommandInfiniteJump implements TabExecutor {
         }
 
         if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("infinitejump.use")) {
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "Only players can use this command");
-                return true;
-            }
-
-            Player player = (Player) sender;
-
-            if (plugin.getJumpManager().getEnabledPlayers().contains(player.getUniqueId())) {
-                plugin.getJumpManager().disable(player);
-                player.sendMessage(getConfigMessage("Disabled"));
-
-            } else {
-                plugin.getJumpManager().enable(player);
-                player.sendMessage(getConfigMessage("Activated"));
-            }
+            handleToggle(sender, args);
 
             return true;
         }
@@ -59,10 +47,14 @@ public class CommandInfiniteJump implements TabExecutor {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 0) {
+            return Collections.emptyList();
+        }
+
         if (args.length == 1) {
             List<String> completions = new ArrayList<>();
 
-            if (sender.hasPermission("infinitejump.use") && sender instanceof Player) {
+            if (sender.hasPermission("infinitejump.use")) {
                 completions.add("toggle");
             }
 
@@ -73,19 +65,85 @@ public class CommandInfiniteJump implements TabExecutor {
             return StringUtil.copyPartialMatches(args[0], completions, new ArrayList<>());
         }
 
+        if (args[0].equalsIgnoreCase("toggle") && sender.hasPermission("infinitejump.use")) {
+            if (args.length == 2) {
+                return StringUtil.copyPartialMatches(args[1], Arrays.asList("on", "off"), new ArrayList<>());
+            }
+
+            if (args.length == 3 && sender.hasPermission("infinitejump.toggle.others")) {
+                return null;
+            }
+        }
+
         return Collections.emptyList();
     }
 
     private void sendUsage(CommandSender sender) {
         sender.sendMessage(color("&bInfiniteJump v" + plugin.getDescription().getVersion() + " &7by &bMrMicky&7."));
 
-        if (sender.hasPermission("infinitejump.use") && sender instanceof Player) {
-            sender.sendMessage(color("&7- &b/infinitejump toggle"));
+        if (sender.hasPermission("infinitejump.toggle.others")) {
+            sender.sendMessage(color("&7- &b/infinitejump toggle [on|off] [player]"));
+        } else if (sender.hasPermission("infinitejump.use")) {
+            sender.sendMessage(color("&7- &b/infinitejump toggle [on|off]"));
         }
 
         if (sender.hasPermission("infinitejump.reload")) {
             sender.sendMessage(color("&7- &b/infinitejump reload"));
         }
+    }
+
+    private void handleToggle(CommandSender sender, String[] args) {
+        Player player = null;
+
+        if (args.length >= 3 && sender.hasPermission("infinitejump.toggle.others")) {
+            player = Bukkit.getPlayer(args[2]);
+
+            if (player == null) {
+                sender.sendMessage(ChatColor.RED + "The player '" + args[2] + "' doesn't exists.");
+
+                return;
+            }
+        }
+
+        if (player == null) {
+            if (!(sender instanceof Player)) {
+                sendToggleUsage(sender);
+
+                return;
+            }
+
+            player = (Player) sender;
+        }
+
+        boolean enable = !plugin.getJumpManager().getEnabledPlayers().contains(player.getUniqueId());
+
+        if (args.length >= 2) {
+            if (args[1].equalsIgnoreCase("on")) {
+                enable = true;
+            } else if (args[1].equalsIgnoreCase("off")) {
+                enable = false;
+            } else {
+                sendToggleUsage(sender);
+                return;
+            }
+        }
+
+        if (enable) {
+            plugin.getJumpManager().enable(player);
+            sender.sendMessage(getConfigMessage("Activated"));
+        } else {
+            plugin.getJumpManager().disable(player);
+            sender.sendMessage(getConfigMessage("Disabled"));
+        }
+    }
+
+    private void sendToggleUsage(CommandSender sender) {
+        if (sender.hasPermission("infinitejump.toggle.others")) {
+            sender.sendMessage(ChatColor.RED + "Usage: /ijump toggle [on|off] [player]");
+            return;
+        }
+
+        sender.sendMessage(ChatColor.RED + "Usage: /ijump toggle [on|off]");
     }
 
     private String color(String s) {

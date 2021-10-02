@@ -10,4 +10,4 @@ commands:
   infinitejump:
     description: Toggle infinite jump or reload the config
     aliases: [ijump]
-    usage: /<command> [toggle|reload]
+    usage: /<command> [toggle [on|off] [player]|reload]
