@@ -1,6 +1,6 @@
 package fr.mrmicky.infinitejump;
 
-import fr.mrmicky.infinitejump.events.InfiniteJumpToggleEvent;
+import fr.mrmicky.infinitejump.event.JumpStartEvent;
 import fr.mrmicky.infinitejump.particle.ParticleUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import java.util.UUID;
@@ -51,6 +52,11 @@ public class JumpListener implements Listener {
     }
 
     @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent e) {
+        reloadPlayer(e.getPlayer());
+    }
+
+    @EventHandler
     public void onPlayerToggleFlight(PlayerToggleFlightEvent e) {
         Player player = e.getPlayer();
         UUID uuid = player.getUniqueId();
@@ -67,9 +73,10 @@ public class JumpListener implements Listener {
             return;
         }
 
-        InfiniteJumpToggleEvent infiniteJumpToggleEvent = new InfiniteJumpToggleEvent(e.getPlayer());
-        Bukkit.getPluginManager().callEvent(infiniteJumpToggleEvent);
-        if (infiniteJumpToggleEvent.isCancelled()){
+        JumpStartEvent jumpEvent = new JumpStartEvent(e.getPlayer());
+        Bukkit.getPluginManager().callEvent(jumpEvent);
+
+        if (jumpEvent.isCancelled()){
             return;
         }
 

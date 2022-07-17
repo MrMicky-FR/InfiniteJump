@@ -1,22 +1,17 @@
-package fr.mrmicky.infinitejump.events;
+package fr.mrmicky.infinitejump.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
-public class InfiniteJumpToggleEvent extends Event implements Cancellable {
+public class JumpStartEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private final Player player;
-    private boolean cancelled;
+    private boolean cancelled = false;
 
-    public InfiniteJumpToggleEvent(Player player) {
-        this.player = player;
-    }
-
-    public Player getPlayer() {
-        return player;
+    public JumpStartEvent(Player player) {
+        super(player);
     }
 
     @Override
